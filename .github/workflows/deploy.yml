@@ -25,4 +25,5 @@ jobs:
         run: kubectl apply -f nginx-deployment.yaml
 
       - name: Get Minikube IP
-        run: echo "Minikube IP: $(minikube ip)"
+        run: |
+          minikube ip
