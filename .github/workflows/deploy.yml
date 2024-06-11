@@ -1,4 +1,4 @@
-name: Deploy Nginx to KubeSail
+name: Deploy to Minikube
 
 on:
   push:
@@ -13,20 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Start Minikube
+        run: minikube start
+
       - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
+        uses: azure/setup-kubectl@v1
         with:
-          version: 'latest'
+          kubeconfig: ~/.kube/config
 
-      - name: Set up KubeConfig
-        env:
-          KUBECONFIG_DATA: ${{ secrets.KUBECONFIG_CONTENT }}
-        run: |
-          mkdir -p ~/.kube
-          echo "$KUBECONFIG_DATA" > ~/.kube/config
-          kubectl config view # Debugging: View the KubeConfig
-          kubectl get nodes # Debugging: Verify connection to the cluster
+      - name: Apply Kubernetes manifests
+        run: kubectl apply -f nginx-deployment.yaml
 
-      - name: Deploy Nginx
-        run: |
-          kubectl apply -f k8s/nginx-deployment.yaml
+      - name: Get Minikube IP
+        run: echo "Minikube IP: $(minikube ip)"
