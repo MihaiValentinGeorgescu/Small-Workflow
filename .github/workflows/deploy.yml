@@ -1,4 +1,4 @@
-name: Deploy to Minikube
+name: Curl Nginx Container
 
 on:
   push:
@@ -6,24 +6,13 @@ on:
       - main
 
 jobs:
-  deploy:
+  curl-nginx:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Start Minikube
-        run: minikube start
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v1
-        with:
-          kubeconfig: ~/.kube/config
-
-      - name: Apply Kubernetes manifests
-        run: kubectl apply -f nginx-deployment.yaml
-
-      - name: Get Minikube IP
+      - name: Run a curl command
         run: |
-          minikube ip
+          curl http://localhost:8080
