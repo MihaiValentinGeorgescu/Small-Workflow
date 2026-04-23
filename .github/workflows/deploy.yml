@@ -4,7 +4,7 @@ on: [push]
 jobs:
   test-robot:
     runs-on: ubuntu-latest
-    container: cyberbotics/webots:latest # Uses the image you want
+    container: cyberbotics/webots:latest
     
     steps:
       - name: Checkout Code
