@@ -1,18 +1,24 @@
-name: Curl Nginx Container
-
-on:
-  push:
-    branches:
-      - main
+name: Webots Simulation
+on: [push]
 
 jobs:
-  curl-nginx:
+  test-robot:
     runs-on: ubuntu-latest
-
+    container: cyberbotics/webots:latest # Uses the image you want
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Run a curl command
+      - name: Compile C Controller
         run: |
-          curl http://localhost:8080
+          # We don't need to install 'make' or 'gcc' because 
+          # the cyberbotics image already has them!
+          cd controllers/ure_can_grasper
+          make
+
+      - name: Run Simulation
+        run: |
+          # We use xvfb-run ONLY because the GitHub server has no physical monitor.
+          # Everything else is exactly like your Dockerfile.
+          xvfb-run webots --batch --mode=fast --stdout --stderr worlds/ure.wbt
