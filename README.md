@@ -1,2 +1,2 @@
 # Small-Workflow
-Small devops project to showcase a workflow
+Small devops project to showcase a  workflow
